@@ -79,6 +79,38 @@ namespace PACHI
                 ToReturn = ToReturn + " that says '" + TextValue + "'";   
             }
 
+            //If it is a form, append the fields
+            if (ControlType.ToLower() == "form")
+            {
+                //Mapped to data source?
+                string DataSource = Properties["DataSource"];
+                if (DataSource.StartsWith("="))
+                {
+                    DataSource = DataSource.Substring(1); //strip out lead "=" sign
+                }
+
+
+                ToReturn = ToReturn + " mapped to the '" + DataSource + "' data source with the following fields:";
+                foreach (CanvasControl DataFieldCard in Children)
+                {
+                    string DataField = DataFieldCard.Properties["DataField"];
+
+                    //Strip out the leading =" and the ending "
+                    if (DataField.StartsWith("=\""))
+                    {
+                        DataField = DataField.Substring(2);
+                    }
+
+                    //Strip out trailing "
+                    if (DataField.EndsWith("\""))
+                    {
+                        DataField = DataField.Substring(0, DataField.Length - 1);
+                    }
+
+                    ToReturn = ToReturn + "\n\t- " + DataField;
+                }
+            }
+
             return ToReturn;
         }
     }
