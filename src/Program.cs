@@ -16,13 +16,22 @@ namespace PACHI
 
         public static async Task TestAsync()
         {
+
+            //Set up
             CanvasApp app = CanvasApp.FromMSAPP(@"C:\Users\timh\Downloads\ContactEntryApp");
-           
             CanvasSimulator sim = new CanvasSimulator(app);
 
-            Console.WriteLine(sim.Describe());
+            //Parse creds
+            AzureOpenAICredentials? creds = JsonConvert.DeserializeObject<AzureOpenAICredentials>(System.IO.File.ReadAllText(@"C:\Users\timh\Downloads\PACHI\keys.json"));
+            if (creds == null)
+            {
+                throw new Exception("Unable to extract Azure OpenAI creds from file.");
+            }
 
-            sim.Click("EnterButton");
+            PACHI p = new PACHI("Create a contact record with first name 'Tim' and last name 'Hanewich'.", sim, creds);
+
+            await p.CompleteAsync();
+            
 
         }
     }
