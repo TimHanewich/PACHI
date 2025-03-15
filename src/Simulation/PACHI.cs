@@ -50,7 +50,7 @@ namespace PACHI
         {
         
             //Get system prompt
-            string system = System.IO.File.ReadAllText(@"C:\Users\timh\Downloads\PACHI\prompts\system.md");
+            string system = System.IO.File.ReadAllText(@"..\prompts\system.md");
 
             //Produce user prompt
             string user = sim.Describe();
