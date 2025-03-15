@@ -37,6 +37,35 @@ namespace PACHI
                         ToReturn.Controls.Add(CanvasControl.FromJProperty(ScreenProperty));
                     }
 
+                    //Sort controls by Y position
+                    if (ToReturn.Controls.Count > 0)
+                    {
+                        //Prepare list of them sorted
+                        List<CanvasControl> ControlsSorted = new List<CanvasControl>();
+                        while (ToReturn.Controls.Count > 0)
+                        {
+                            //Find the lowest
+                            CanvasControl LowestY = ToReturn.Controls[0];
+                            foreach (CanvasControl cc in ToReturn.Controls)
+                            {
+                                if (cc.Properties.ContainsKey("Y") && LowestY.Properties.ContainsKey("Y"))
+                                {
+                                    int lowY = Convert.ToInt32(LowestY.Properties["Y"].ToString().Replace("=", ""));
+                                    int thisY = Convert.ToInt32(cc.Properties["Y"].ToString().Replace("=", ""));
+                                    if (thisY < lowY)
+                                    {
+                                        LowestY = cc;
+                                    }
+                                }
+                            }
+
+                            //Add it
+                            ToReturn.Controls.Remove(LowestY); //Remove from list
+                            ControlsSorted.Add(LowestY); //Add to sorted list
+                        }
+                        ToReturn.Controls = ControlsSorted;
+                    }
+
                 }
             }
 
