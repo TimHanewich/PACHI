@@ -25,7 +25,11 @@ namespace PACHI
             {
                 if (line != "") //ignore empty lines
                 {
-                    if (ChildObjectName != null && ChildObject != null) //if we are collecting for a child object right now, throw it in the batch
+
+                    //if we are collecting for a child object right now... handle it in two ways:
+                    // 1 - If we are still in the child, add it to the batch that will be processed next
+                    // 2 - If we are no longer in the child (a reverse indent happened), add the child.
+                    if (ChildObjectName != null && ChildObject != null) 
                     {
                         int LeadingTabsOfDeclaringLine = CountLeadingSpaces(ChildObjectName); //just using spaces as I've seen that format used mostly
                         int ThisLinesLeadingTabs = CountLeadingSpaces(line); //just using spaces as I've seen that format used mostly
@@ -33,7 +37,7 @@ namespace PACHI
                         {
                             Console.WriteLine("Still more than " + LeadingTabsOfDeclaringLine.ToString() + " indents: " + line);
                             ChildObject.Add(line);
-                            continue;
+                            continue; //This line was thrown into the batch that will be processed as a child element (by this function, recursively)... no more work needed on it, so jump to next loop (next line).
                         }
                         else //We are no longer in it... the indent just decreased
                         {                       
@@ -47,14 +51,14 @@ namespace PACHI
                         }
                     }
 
-                    //Handle!
-                    if (line.EndsWith(":")) //we are not collecting for a child right now, but this line here is declaring the start of a child, so start collecting for a child
+                    //We got this far... which means the line we are on right now is not simply a child line. It is either a property line or the start of a NEW child object.
+                    if (line.EndsWith(":")) //declaring the start of a child, so start collecting for a child
                     {
                         ChildObjectName = line.Substring(0, line.Length - 1); //trim out the trailing ":"
                         ChildObject = new List<string>(); //Create a list of sub-lines
                         Console.WriteLine("New child for '" + ChildObjectName + "' started!");
                     }
-                    else //it must be a property add it as a property
+                    else //it must be a property, so add it as a property
                     {
                         
                         //each yaml property should have a colon where the property name is separated from the value
