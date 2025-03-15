@@ -4,15 +4,15 @@ using Newtonsoft.Json.Linq;
 
 namespace PACHI
 {
-    public class YamlParser
+    public class YAMLParser
     {
 
-        public static JObject ParseYAML(string yaml)
+        public static JObject Parse(string yaml)
         {
-            return ParseYAML(yaml.Split(Environment.NewLine));
+            return Parse(yaml.Split(Environment.NewLine));
         }
 
-        public static JObject ParseYAML(string[] lines)
+        public static JObject Parse(string[] lines)
         {
 
             //Hoppers for collecting stuff about a child element
@@ -41,7 +41,7 @@ namespace PACHI
                         else //We are no longer in it... the indent just decreased
                         {                       
                             //Add it
-                            JObject ThisChildObject = ParseYAML(ChildObject.ToArray());
+                            JObject ThisChildObject = Parse(ChildObject.ToArray());
                             ToReturn.Add(ChildObjectName.Trim(), ThisChildObject);
 
                             //Clear it
@@ -79,7 +79,7 @@ namespace PACHI
             // (there wasnt a line w/ a lesser indent after it that clearly indicated the end, so it wasn't triggered above... this could happen at the end of file for example)
             if (ChildObject != null && ChildObjectName != null)
             {
-                JObject ThisChildObject = ParseYAML(ChildObject.ToArray());
+                JObject ThisChildObject = Parse(ChildObject.ToArray());
                 ToReturn.Add(ChildObjectName.Trim(), ThisChildObject);
             }
 
