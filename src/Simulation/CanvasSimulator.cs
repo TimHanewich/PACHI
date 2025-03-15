@@ -100,7 +100,12 @@ namespace PACHI
 
         public void Type(string text_input_control_name, string content)
         {
-
+            CanvasControl? ToTypeInto = FindControl(text_input_control_name);
+            if (ToTypeInto == null)
+            {
+                throw new Exception("Unable to type into control '" + text_input_control_name + "' because a control with that name was not found on the current screen!");
+            }
+            Type(ToTypeInto, content);
         }
 
         //Type some text into a canvas control text input
