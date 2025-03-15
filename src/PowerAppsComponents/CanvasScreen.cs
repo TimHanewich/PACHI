@@ -22,7 +22,23 @@ namespace PACHI
 
             //Convert YAML to JSON
             JObject AsJson = YAMLParser.Parse(yaml);
-            Console.WriteLine(AsJson.ToString(Newtonsoft.Json.Formatting.Indented));
+            
+            foreach (JProperty property in AsJson.Properties())
+            {
+                if (property.Name.EndsWith(" As screen"))
+                {
+                    //Get screen name
+                    ToReturn.Name = property.Name.Substring(0, property.Name.Length - 10); //trim off the ending " As screen" (10 characters)
+
+                    //The screen itself is going to have its value set to another Jobject which contains indidividual UI elements
+                    JObject ScreenChildren = (JObject)property.Value;
+                    foreach (JProperty ScreenProperty in ScreenChildren.Properties())
+                    {                        
+                        ToReturn.Controls.Add(CanvasControl.FromJProperty(ScreenProperty));
+                    }
+
+                }
+            }
 
             return ToReturn;
         }
