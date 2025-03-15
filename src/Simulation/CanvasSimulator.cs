@@ -38,6 +38,8 @@ namespace PACHI
             return ToReturn;
         }
 
+        #region "clicking"
+
         public void Click(string control_name)
         {
             CanvasControl? ToClick = FindControl(control_name);
@@ -111,6 +113,10 @@ namespace PACHI
             }
         }
 
+        #endregion
+
+        #region  "typing"
+
         public void Type(string text_input_control_name, string content)
         {
             CanvasControl? ToTypeInto = FindControl(text_input_control_name);
@@ -132,6 +138,9 @@ namespace PACHI
             InteractionHistory.Add("Typed '" + content + "' into a text box named '" + cc.Name + "'");
         }
 
+        #endregion
+
+        #region "tools"
 
         //Finds a control on the screen by its name, searching at depth
         public CanvasControl? FindControl(string name)
@@ -159,6 +168,8 @@ namespace PACHI
             }
             return null; //If we went through all of them and none of them found it, we couldn't find it... so return null;
         }
+
+        #endregion
 
     }
 }
