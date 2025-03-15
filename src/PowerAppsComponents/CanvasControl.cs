@@ -93,33 +93,47 @@ namespace PACHI
                 ToReturn = ToReturn + " mapped to the '" + DataSource + "' data source with the following fields (text input boxes):";
                 foreach (CanvasControl DataFieldCard in Children)
                 {
+                    //Get the data field
                     string DataField = DataFieldCard.Properties["DataField"];
-
-                    //Strip out the leading =" and the ending "
-                    if (DataField.StartsWith("=\""))
+                    if (DataField.StartsWith("=\"")) //Strip out the leading =" and the ending "
                     {
                         DataField = DataField.Substring(2);
                     }
-
-                    //Strip out trailing "
-                    if (DataField.EndsWith("\""))
+                    if (DataField.EndsWith("\"")) //Strip out trailing "
                     {
                         DataField = DataField.Substring(0, DataField.Length - 1);
                     }
 
-                    ToReturn = ToReturn + "\n\t- " + "Field '" + DataField + "'";
+
+                    //Find the actual text input control WITHIN this card
+                    CanvasControl? TextInputBox = null;
+                    foreach (CanvasControl CardElement in DataFieldCard.Children)
+                    {
+                        if (CardElement.ControlType == "text") //the "text" control is where the text input actually goes
+                        {
+                            TextInputBox = CardElement;
+                        }
+                    }
+
+                    //If we were unable to find the text input box
+                    if (TextInputBox == null)
+                    {
+                        throw new Exception("Unable to find text input box within data field card '" + DataFieldCard.Name + "'... did the user delete it? Without it, I will not be able to input data into this field of the form.");
+                    }
+
+                    ToReturn = ToReturn + "\n\t- " + "Text input box named '" + TextInputBox.Name + "' mapped to the data field '" + DataField + "'";
 
                     //Does it contain any text?
                     //I do not know how the text would be stored in YAML, or even if it would be (it probably wouldnt be)
                     //However, but for the sake of this demo, I will store it in the "VALUE" property as a placeholder.
-                    if (DataFieldCard.Properties.ContainsKey("VALUE") == false)
+                    if (TextInputBox.Properties.ContainsKey("VALUE") == false)
                     {
-                        ToReturn = ToReturn + " containing \"\"";
+                        ToReturn = ToReturn + ", currently containing \"\"";
                     }
                     else //It has a value! (I must have put it there)
                     {
-                        string VALUE = DataFieldCard.Properties["VALUE"];
-                        ToReturn = ToReturn + " containing text \"" + VALUE + "\"";
+                        string VALUE = TextInputBox.Properties["VALUE"];
+                        ToReturn = ToReturn + " currently containing \"" + VALUE + "\"";
                     }
 
                 }
