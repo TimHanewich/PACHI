@@ -107,7 +107,7 @@ namespace PACHI
                         DataField = DataField.Substring(0, DataField.Length - 1);
                     }
 
-                    ToReturn = ToReturn + "\n\t- " + DataField;
+                    ToReturn = ToReturn + "\n\t- " + "Field '" + DataField + "'";
 
                     //Does it contain any text?
                     //I do not know how the text would be stored in YAML, or even if it would be (it probably wouldnt be)
@@ -119,7 +119,7 @@ namespace PACHI
                     else //It has a value! (I must have put it there)
                     {
                         string VALUE = DataFieldCard.Properties["VALUE"];
-                        ToReturn = ToReturn + " containing \"" + VALUE + "\"";
+                        ToReturn = ToReturn + " containing text \"" + VALUE + "\"";
                     }
 
                 }
