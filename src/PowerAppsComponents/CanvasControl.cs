@@ -90,7 +90,7 @@ namespace PACHI
                 }
 
 
-                ToReturn = ToReturn + " mapped to the '" + DataSource + "' data source with the following fields:";
+                ToReturn = ToReturn + " mapped to the '" + DataSource + "' data source with the following fields (text input boxes):";
                 foreach (CanvasControl DataFieldCard in Children)
                 {
                     string DataField = DataFieldCard.Properties["DataField"];
@@ -108,6 +108,20 @@ namespace PACHI
                     }
 
                     ToReturn = ToReturn + "\n\t- " + DataField;
+
+                    //Does it contain any text?
+                    //I do not know how the text would be stored in YAML, or even if it would be (it probably wouldnt be)
+                    //However, but for the sake of this demo, I will store it in the "VALUE" property as a placeholder.
+                    if (DataFieldCard.Properties.ContainsKey("VALUE") == false)
+                    {
+                        ToReturn = ToReturn + " containing \"\"";
+                    }
+                    else //It has a value! (I must have put it there)
+                    {
+                        string VALUE = DataFieldCard.Properties["VALUE"];
+                        ToReturn = ToReturn + " containing \"" + VALUE + "\"";
+                    }
+
                 }
             }
 
