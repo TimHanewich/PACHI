@@ -6,11 +6,13 @@ namespace PACHI
     {
         private CanvasApp app;
         private CanvasScreen onScreen;
+        private List<string> InteractionHistory; //List of everything the user has done (each click + type)
 
         public CanvasSimulator(CanvasApp canvas_app)
         {
             app = canvas_app;
             onScreen = canvas_app.Screens[0]; //start with first screen (default for the app)
+            InteractionHistory = new List<string>();
         }
 
         public string Describe()
@@ -21,6 +23,16 @@ namespace PACHI
             foreach (CanvasControl cc in onScreen.Controls)
             {
                 ToReturn = ToReturn + "\n- " + cc.Describe();
+            }
+
+            //History
+            if (InteractionHistory.Count > 0)
+            {
+                ToReturn = ToReturn + "\n\n" + "So far you have: ";
+                foreach (string interaction in InteractionHistory)
+                {
+                    ToReturn = ToReturn + "\n- " + interaction;
+                }
             }
 
             return ToReturn;
@@ -54,6 +66,7 @@ namespace PACHI
                     ExecutePowerFx(PowerFxCode);
                 }
             }
+            InteractionHistory.Add("clicked a " + cc.ControlType + " control named '" + cc.Name + "'");
         }
 
         public void ExecutePowerFx(string powerfx)
@@ -116,6 +129,7 @@ namespace PACHI
                 throw new Exception("Refusing to type text into control '" + cc.Name + "' because it is not a 'text' control type, it is a '" + cc.ControlType + "' control type.");
             }
             cc.Properties["VALUE"] = content; //Again, do not know where the text would be stored or even if it would be stored (likely would not be in YAML), but putting it as "VALUE" property for safe keeping in this demo.
+            InteractionHistory.Add("Typed '" + content + "' into a text box named '" + cc.Name + "'");
         }
 
 
