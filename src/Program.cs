@@ -8,9 +8,8 @@ namespace PACHI
     {
         public static void Main(string[] args)
         {
-            string YamlTxt = System.IO.File.ReadAllText(@"C:\Users\timh\Downloads\ContactEntryApp\Src\ContactDetailsScreen.fx.yaml");
-            JObject doc = YAMLParser.Parse(YamlTxt);
-            Console.WriteLine(doc.ToString());    
+            CanvasApp app = CanvasApp.FromMSAPP(@"C:\Users\timh\Downloads\ContactEntryApp");
+            Console.WriteLine(JsonConvert.SerializeObject(app, Formatting.Indented));
         }
     }
 }

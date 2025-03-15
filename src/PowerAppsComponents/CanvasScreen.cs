@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace PACHI
 {
@@ -13,5 +15,18 @@ namespace PACHI
             Name = "";
             Controls = new List<CanvasControl>();
         }
+
+        public static CanvasScreen FromYAML(string yaml)
+        {
+            CanvasScreen ToReturn = new CanvasScreen();
+
+            //Convert YAML to JSON
+            JObject AsJson = YAMLParser.Parse(yaml);
+            Console.WriteLine(AsJson.ToString(Newtonsoft.Json.Formatting.Indented));
+
+            return ToReturn;
+        }
+
+        
     }
 }
