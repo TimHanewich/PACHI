@@ -9,7 +9,13 @@ namespace PACHI
         public static void Main(string[] args)
         {
             CanvasApp app = CanvasApp.FromMSAPP(@"C:\Users\timh\Downloads\ContactEntryApp");
-            Console.WriteLine(JsonConvert.SerializeObject(app, Formatting.Indented));
+            
+            foreach (CanvasScreen cs in app.Screens)
+            {
+                Console.WriteLine(cs.Describe());
+                Console.WriteLine();
+                Console.WriteLine();
+            }
         }
     }
 }

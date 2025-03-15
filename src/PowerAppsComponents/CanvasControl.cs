@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace PACHI
 {
-    public class CanvasControl
+    public class CanvasControl : IDescribable
     {
         public string Name {get; set;}
         public string ControlType {get; set;}
@@ -54,6 +54,29 @@ namespace PACHI
                 {
                     ToReturn.Properties.Add(ControlProperty.Name, ControlProperty.Value.ToString());
                 }
+            }
+
+            return ToReturn;
+        }
+    
+        public string Describe()
+        {
+            string ToReturn = "A " + ControlType + " named '" + Name + "'";
+           
+            //Append what it says?
+            if (Properties.ContainsKey("Text"))
+            {
+                string TextValue = Properties["Text"];
+                if (TextValue.StartsWith("="))
+                {
+                    TextValue = TextValue.Substring(1);
+                }
+                if (TextValue.StartsWith("\"") && TextValue.EndsWith("\""))
+                {
+                    TextValue = TextValue.Substring(1, TextValue.Length - 2);
+                }
+
+                ToReturn = ToReturn + " that says '" + TextValue + "'";   
             }
 
             return ToReturn;

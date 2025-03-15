@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace PACHI
 {
-    public class CanvasScreen
+    public class CanvasScreen : IDescribable
     {
         public string Name {get; set;}
         public List<CanvasControl> Controls {get; set;}
@@ -40,6 +40,16 @@ namespace PACHI
                 }
             }
 
+            return ToReturn;
+        }
+
+        public string Describe()
+        {
+            string ToReturn = "A screen named '" + Name + "' with the following controls on it:";
+            foreach (CanvasControl cc in Controls)
+            {
+                ToReturn = ToReturn + "\n- " + cc.Describe();
+            }
             return ToReturn;
         }
 
