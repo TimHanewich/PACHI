@@ -61,6 +61,36 @@ namespace PACHI
             }
 
 
+            //Now that we have the screens parsed and constructed, now ensure at least the first screen is brought first
+            JProperty? ScreenOrder = CanvasManifest.Property("ScreenOrder");
+            if (ScreenOrder != null)
+            {
+                string[]? ScreenOrderParsed = JsonConvert.DeserializeObject<string[]>(ScreenOrder.Value.ToString());
+                if (ScreenOrderParsed != null)
+                {
+                    string FirstScreeName = ScreenOrderParsed[0];
+
+                    //Select the screen
+                    CanvasScreen? FirstScreen = null;
+                    foreach (CanvasScreen screen in ToReturn.Screens)
+                    {
+                        if (screen.Name == FirstScreeName)
+                        {
+                            FirstScreen = screen;
+                        }
+                    }
+
+                    //Not found?
+                    if (FirstScreen == null)
+                    {
+                        throw new Exception("CanvasManifest specifies that the first screen in order is called '" + FirstScreeName + "' but I was unable to find a screen with that exact names in the parsed screens.");
+                    }
+
+                    //move it!
+                    ToReturn.Screens.Remove(FirstScreen); //Remove it
+                    ToReturn.Screens.Insert(0, FirstScreen); //Insert it at the front
+                }
+            }
 
 
 
