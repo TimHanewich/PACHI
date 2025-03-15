@@ -50,11 +50,18 @@ namespace PACHI
                             {
                                 if (cc.Properties.ContainsKey("Y") && LowestY.Properties.ContainsKey("Y"))
                                 {
-                                    int lowY = Convert.ToInt32(LowestY.Properties["Y"].ToString().Replace("=", ""));
-                                    int thisY = Convert.ToInt32(cc.Properties["Y"].ToString().Replace("=", ""));
-                                    if (thisY < lowY)
+                                    try //Place this in a try bracket because the Y property may not be just an integer like I assume below, it may be a formula. And if it were a formula, the Int32 conversion will not work
                                     {
-                                        LowestY = cc;
+                                        int lowY = Convert.ToInt32(LowestY.Properties["Y"].ToString().Replace("=", ""));
+                                        int thisY = Convert.ToInt32(cc.Properties["Y"].ToString().Replace("=", ""));
+                                        if (thisY < lowY)
+                                        {
+                                            LowestY = cc;
+                                        }
+                                    }
+                                    catch
+                                    {
+
                                     }
                                 }
                             }
