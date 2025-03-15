@@ -28,14 +28,7 @@ namespace PACHI
 
         public void Click(string control_name)
         {
-            CanvasControl? ToClick = null;
-            foreach (CanvasControl cc in onScreen.Controls)
-            {
-                if (cc.Name == control_name)
-                {
-                    ToClick = cc;
-                }
-            }
+            CanvasControl? ToClick = FindControl(control_name);
             if (ToClick == null)
             {
                 throw new Exception("You cannot click a control with name '" + control_name + "' because no control on the current screen has that name!");
@@ -104,5 +97,49 @@ namespace PACHI
                 }
             }
         }
+
+        public void Type(string text_input_control_name, string content)
+        {
+
+        }
+
+        //Type some text into a canvas control text input
+        public void Type(CanvasControl cc, string content)
+        {
+            if (cc.ControlType != "text")
+            {
+                throw new Exception("Refusing to type text into control '" + cc.Name + "' because it is not a 'text' control type, it is a '" + cc.ControlType + "' control type.");
+            }
+            cc.Properties["VALUE"] = content; //Again, do not know where the text would be stored or even if it would be stored (likely would not be in YAML), but putting it as "VALUE" property for safe keeping in this demo.
+        }
+
+
+        //Finds a control on the screen by its name, searching at depth
+        public CanvasControl? FindControl(string name)
+        {
+            return FindControl(onScreen.Controls.ToArray(), name);
+        }
+
+        //Searches the entire screen we are on right now for a control of a specific name, but at every depth (even through child controls of child controls of child controls, etc.)
+        private CanvasControl? FindControl(CanvasControl[] search_through, string name)
+        {
+            foreach (CanvasControl cc in search_through)
+            {
+                if (cc.Name == name)
+                {
+                    return cc;
+                }
+                else
+                {
+                    CanvasControl? found = FindControl(cc.Children.ToArray(), name);
+                    if (found != null)
+                    {
+                        return found;
+                    }
+                }
+            }
+            return null; //If we went through all of them and none of them found it, we couldn't find it... so return null;
+        }
+
     }
 }
