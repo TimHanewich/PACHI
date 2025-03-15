@@ -38,6 +38,35 @@ namespace PACHI
             return ToReturn;
         }
 
+        public void ExecuteActionDecision(ActionDecision ad)
+        {
+            if (ad.Action == Action.complete)
+            {
+                throw new Exception("The provided ActionDecision that you provided had the 'complete' flag, so nothing to execute.");
+            }
+            else
+            {
+                //Check that control is not null
+                if (ad.Control == null)
+                {
+                    throw new Exception("Provided ActionDecision to execute did not have required property 'control' which is required for the '" + ad.Action.ToString() + "' action.");
+                }
+
+                if (ad.Action == Action.click)
+                {
+                    Click(ad.Control);
+                }
+                else if (ad.Action == Action.type)
+                {
+                    if (ad.Text == null)
+                    {
+                        throw new Exception("Provided ActionDecision to execute did not have required property 'text' which is required for the '" + ad.Action.ToString() + "' action.");
+                    }
+                    Type(ad.Control, ad.Text);
+                }
+            }
+        }
+
         #region "clicking"
 
         public void Click(string control_name)

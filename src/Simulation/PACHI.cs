@@ -25,17 +25,28 @@ namespace PACHI
         {
             while (true)
             {
-                bool DoneAfterNextAction = await ActAsync();
-                if (DoneAfterNextAction)
+                ActionDecision NextDecision = await DecideAsync();
+                if (NextDecision.Action == Action.complete)
                 {
-                    return;
+                    Console.WriteLine("Model indicated the task is complete!");
+                    break;
+                }
+                else if (NextDecision.Action == Action.click)
+                {
+                    Console.WriteLine("Model decided to click '" + NextDecision.Control + "'");
+                    sim.ExecuteActionDecision(NextDecision);
+                }
+                else if (NextDecision.Action == Action.type)
+                {
+                    Console.WriteLine("Model decided to type '" + NextDecision.Text + "' into '" + NextDecision.Control + "'");
+                    sim.ExecuteActionDecision(NextDecision);
                 }
             }
         }
 
-        //Asks model to decide what to do next and then does what it says to do.
+        //Asks model to decide what to do next
         //Returns TRUE if it indicates the job is now done, FALSE if it did something but there is more work to do.
-        public async Task<bool> ActAsync()
+        public async Task<ActionDecision> DecideAsync()
         {
         
             //Get system prompt
@@ -73,8 +84,7 @@ namespace PACHI
             //Handle acton
             if (action == "complete")
             {
-                Console.WriteLine("Model indicated the job is done!");
-                return true;
+                return new ActionDecision(Action.complete);
             }
             else if (action == "click" || action == "type")
             {
@@ -88,8 +98,7 @@ namespace PACHI
 
                 if (action == "click")
                 {
-                    Console.WriteLine("Model decided to click '" + control + "'");
-                    sim.Click(control);
+                    return new ActionDecision(Action.click, control);
                 }
                 else if (action == "type")
                 {
@@ -101,16 +110,17 @@ namespace PACHI
                     }
                     string text = prop_text.Value.ToString();
 
-                    Console.WriteLine("Model decided to type '" + text + "' into '" + control + "'");
-                    sim.Type(control, text);
+                    return new ActionDecision(Action.type, control, text);
+                }
+                else
+                {
+                    throw new Exception("How did you get here?");
                 }
             }
             else
             {
                 throw new Exception("Model responded with the action '" + action + "' which is not a valid action we gave it.");
             }
-
-            return false; //Return false because it is not done
         }
 
     }
