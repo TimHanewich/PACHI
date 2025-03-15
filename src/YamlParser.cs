@@ -35,7 +35,6 @@ namespace PACHI
                         int ThisLinesLeadingTabs = CountLeadingSpaces(line); //just using spaces as I've seen that format used mostly
                         if (ThisLinesLeadingTabs > LeadingTabsOfDeclaringLine) //We are still WITHIN the child
                         {
-                            Console.WriteLine("Still more than " + LeadingTabsOfDeclaringLine.ToString() + " indents: " + line);
                             ChildObject.Add(line);
                             continue; //This line was thrown into the batch that will be processed as a child element (by this function, recursively)... no more work needed on it, so jump to next loop (next line).
                         }
@@ -56,7 +55,6 @@ namespace PACHI
                     {
                         ChildObjectName = line.Substring(0, line.Length - 1); //trim out the trailing ":"
                         ChildObject = new List<string>(); //Create a list of sub-lines
-                        Console.WriteLine("New child for '" + ChildObjectName + "' started!");
                     }
                     else //it must be a property, so add it as a property
                     {
