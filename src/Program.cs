@@ -190,12 +190,16 @@ namespace PACHI
 
             //Unpack the app
             string UnpackDirectory = Path.Combine(DownloadsDirectory, "unpack-" + Guid.NewGuid().ToString().Replace("-", ""));
+            if (Directory.Exists(UnpackDirectory) == false)
+            {
+                Directory.CreateDirectory(UnpackDirectory);
+            }
             AnsiConsole.Markup("[gray][italic]reading app schema... [/][/]");
             PACPipeline.UnpackCanvasApp(DestinationPath, UnpackDirectory);
             AnsiConsole.MarkupLine("[gray][italic]done[/][/]");
 
             //Open the app
-            AnsiConsole.Markup("[gray][italic]preparing headless simulation... ");
+            AnsiConsole.Markup("[gray][italic]preparing headless simulation... [/][/]");
             CanvasApp app = CanvasApp.FromMSAPP(UnpackDirectory);
             CanvasSimulator sim = new CanvasSimulator(app);
             PACHI pachi = new PACHI(task, sim, model);
@@ -218,7 +222,6 @@ namespace PACHI
                 }
                 else if (NextDecision.Action == Action.type)
                 {
-                    Console.WriteLine("Model decided to type '" + NextDecision.Text + "' into '" + NextDecision.Control + "'");
                     AnsiConsole.MarkupLine("[gray][italic]typing '" + NextDecision.Text + "' into text input '" + NextDecision.Control + "'[/][/]");
                     sim.ExecuteActionDecision(NextDecision);
                 }
