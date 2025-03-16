@@ -40,7 +40,6 @@ namespace PACHI
         {
             string cmd = "pac canvas list";
             string pac_response = ExecuteCmd(cmd);
-            Console.WriteLine(pac_response);
             string[] lines = pac_response.Split(Environment.NewLine);
 
             //Figure out starting position of the "Created by" columns
