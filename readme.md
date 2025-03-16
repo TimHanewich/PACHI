@@ -3,6 +3,11 @@ Ever wished Copilot could interact with your Power Apps for you? **Look no furth
 
 I built PACHI to demonstrate how Copilot could open and interact with a Power Apps canvas app on a user's behalf to satisfy their request within a Copilot chat session.
 
+## TL;DR
+PACHI demonstrates how we could give Copilot the ability to interact with any Power App to fulfill a user's intent. 
+
+To support this capability,I developed methods for canvas app schema extraction and loading, canvas app simulation in a headless environment, and a LLM-prompting methodology to facilitate LLM interacting with a Power App to fulfill the user's intent.
+
 ## How PACHI Works
 PACHI uses a few uninque capabilities strung together into one cohesive system:
 
@@ -129,3 +134,6 @@ Your task is: Add contact record with name 'Tim Hanewich', email 'timhanewich@em
 As you can see above, the model has gone through all the steps necessary... clicking the enter button, entering in details into their appropriate fields on the form, clicking submit button (which will execute PowerFX code to make the Dataverse POST), and then stepping through the success screen.
 
 At this point, upon prompting *this* to the model, the model responds with an `action: complete` output to confirm that the task it was assigned to do is now complete.
+
+## Model Testing
+In my tests, `GPT-4o` and `GPT-4o-mini` have both worked very well.
