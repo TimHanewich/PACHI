@@ -19,7 +19,7 @@ To support this capability, I developed methods for canvas app schema extraction
 - Navigate to [the src folder](./src/) and run `dotnet run`.
 
 ## How PACHI Works
-PACHI uses a few unique capabilities strung together into one cohesive system:
+PACHI, a multi-agent system, uses a few unique capabilities strung together into one cohesive system:
 
 Within a chat session with Copilot (in this demo, just a generic agent), these are the steps that happen:
 
