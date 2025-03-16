@@ -6,7 +6,7 @@ I built PACHI to demonstrate how Copilot could open and interact with a Power Ap
 ## TL;DR
 PACHI demonstrates how we could give Copilot the ability to interact with any Power App to fulfill a user's intent. 
 
-To support this capability, I developed methods for canvas app schema extraction and loading, canvas app simulation in a headless environment, and a LLM-prompting methodology to facilitate LLM interacting with a Power App to fulfill the user's intent.
+To support this capability, I developed methods for canvas app schema extraction and loading, canvas app simulation in a headless environment, and an LLM-prompting methodology to facilitate an LLM interacting with a Power App to fulfill the user's intent.
 
 ## How PACHI Works
 PACHI uses a few unique capabilities strung together into one cohesive system:
