@@ -7,6 +7,35 @@ namespace PACHI
 {
     public class PACPipeline
     {
+
+        //Confirm PAC is installed and try to validate that they are signed in and an org is selected
+        public static bool ConfirmPAC()
+        {
+            string response = ExecuteCmd("pac org who");
+
+            if (response.Contains("is not recognized as an internal or external command"))
+            {
+                return false;
+            }
+            
+            if (response.Contains("Friendly Name:") == false)
+            {
+                return false;
+            }
+
+            if (response.Contains("Org URL:") == false)
+            {
+                return false;
+            }
+
+            if (response.Contains("User Email:") == false)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public static string[] ListCanvasApps()
         {
             string cmd = "pac canvas list";
