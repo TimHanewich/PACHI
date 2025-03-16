@@ -31,6 +31,12 @@ namespace PACHI
             return ToReturn.ToArray();
         }
 
+        public static void DownloadCanvasApp(string environment_id, string app_name, string output_path)
+        {
+            string cmd = "pac canvas download --environment " + environment_id + " --name \"" + app_name + "\" --file-name \"" + output_path + "\"";
+            ExecuteCmd(cmd);
+        }
+
         public static string ExecuteCmd(string command)
         {
             ProcessStartInfo psi = new ProcessStartInfo();
