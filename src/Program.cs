@@ -144,7 +144,18 @@ namespace PACHI
                         }
                         else if (tc.ToolName == "use_app")
                         {
-                            AnsiConsole.Markup("[gray][italic]accessing app... [/][/]");
+                            AnsiConsole.MarkupLine("[gray][italic]accessing app... [/][/]");
+
+                            JProperty? prop_app_name = tc.Arguments.Property("app_name");
+                            JProperty? prop_task = tc.Arguments.Property("task");
+                            if (prop_app_name != null && prop_task != null)
+                            {
+                                tool_call_response_payload = await UseAppAsync(prop_app_name.Value.ToString(), prop_task.Value.ToString(), aoai);
+                            }
+                            else
+                            {
+                                tool_call_response_payload = "Unable to access app because AI model did not properly provide the app name and task parameters.";
+                            }
                         }
 
                         //Append tool response to messages
@@ -165,6 +176,55 @@ namespace PACHI
             } //end of infinite loop chat
 
 
+        }
+    
+        public static async Task<string> UseAppAsync(string app_name, string task, IModelConnection model)
+        {
+            
+            //Download the app
+            string DownloadsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+            string DestinationPath = Path.Combine(DownloadsDirectory, "app-" + Guid.NewGuid().ToString().Replace("-", "") + ".msapp"); //use generic title
+            AnsiConsole.Markup("[gray][italic]downloading app schema... [/][/]");
+            PACPipeline.DownloadCanvasApp(app_name, DestinationPath);
+            AnsiConsole.MarkupLine("[gray][italic]done[/][/]");
+
+            //Unpack the app
+            string UnpackDirectory = Path.Combine(DownloadsDirectory, "unpack-" + Guid.NewGuid().ToString().Replace("-", ""));
+            AnsiConsole.Markup("[gray][italic]reading app schema... [/][/]");
+            PACPipeline.UnpackCanvasApp(DestinationPath, UnpackDirectory);
+            AnsiConsole.MarkupLine("[gray][italic]done[/][/]");
+
+            //Open the app
+            AnsiConsole.Markup("[gray][italic]preparing headless simulation... ");
+            CanvasApp app = CanvasApp.FromMSAPP(UnpackDirectory);
+            CanvasSimulator sim = new CanvasSimulator(app);
+            PACHI pachi = new PACHI(task, sim, model);
+            AnsiConsole.MarkupLine("[gray][italic]done[/][/]");
+
+            //Continuously execute action after action until it is complete
+            while (true)
+            {
+                AnsiConsole.Markup("[gray][italic]considering what to do next... [/][/]");
+                ActionDecision NextDecision = await pachi.DecideAsync();
+                if (NextDecision.Action == Action.complete)
+                {
+                    AnsiConsole.MarkupLine("[gray][italic]task is complete![/][/]");
+                    break;
+                }
+                else if (NextDecision.Action == Action.click)
+                {
+                    AnsiConsole.MarkupLine("[gray][italic]clicking '" + NextDecision.Control + "'[/][/]");
+                    sim.ExecuteActionDecision(NextDecision);
+                }
+                else if (NextDecision.Action == Action.type)
+                {
+                    Console.WriteLine("Model decided to type '" + NextDecision.Text + "' into '" + NextDecision.Control + "'");
+                    AnsiConsole.MarkupLine("[gray][italic]typing '" + NextDecision.Text + "' into text input '" + NextDecision.Control + "'[/][/]");
+                    sim.ExecuteActionDecision(NextDecision);
+                }
+            }
+
+            return "task completed successfully.";
         }
     }
 }
