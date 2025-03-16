@@ -28,6 +28,8 @@ Much like how a user can tag a teams channel or other resources within Copilot, 
 
 In the example above, the user is requesting that Copilot **use the "Contact Entry" app to save a new contact with first name 'Tim', last name 'Hanewich', email 'timhanewich@email.com', and phone number '94177743221'**.
 
+This then kicks off a multi-step process in which the agent explores the application on its quest to fulfill this user's request.
+
 ### Step 2: Download App Schema
 Upon this being requested, a tool is called. This tool kicks off a multi-step process.
 
