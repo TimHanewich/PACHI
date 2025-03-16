@@ -7,9 +7,9 @@ namespace PACHI
 {
     public class PACPipeline
     {
-        public static string[] ListCanvasApps(string environment_id)
+        public static string[] ListCanvasApps()
         {
-            string cmd = "pac canvas list --environment " + environment_id;
+            string cmd = "pac canvas list";
             string pac_response = ExecuteCmd(cmd);
             Console.WriteLine(pac_response);
             string[] lines = pac_response.Split(Environment.NewLine);
@@ -31,9 +31,25 @@ namespace PACHI
             return ToReturn.ToArray();
         }
 
-        public static void DownloadCanvasApp(string environment_id, string app_name, string output_path)
+        public static void DownloadCanvasApp(string app_name, string output_path)
         {
-            string cmd = "pac canvas download --environment " + environment_id + " --name \"" + app_name + "\" --file-name \"" + output_path + "\"";
+            string cmd = "pac canvas download --name \"" + app_name + "\" --file-name \"" + output_path + "\"";
+            ExecuteCmd(cmd);
+        }
+
+        public static void UnpackCanvasApp(string msapp_path, string output_directory)
+        {
+            //Validate
+            if (System.IO.File.Exists(msapp_path) == false)
+            {
+                throw new Exception(".msapp file at '" + msapp_path + "' does not exist.");
+            }
+            if (System.IO.Directory.Exists(output_directory) == false)
+            {
+                throw new Exception("Output directory of '" + output_directory + "' does not exist!");
+            }
+
+            string cmd = "pac canvas unpack --msapp \"" + msapp_path + "\" --sources \"" + output_directory + "\"";
             ExecuteCmd(cmd);
         }
 
