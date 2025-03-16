@@ -1,17 +1,17 @@
 # PACHI: Power Apps x Canvas Headless Integration
-Ever wished Copilot could interact with your Power Apps for you? **Look no further!**
+Ever wondered what it would look like if Copilot could interact with your Power Apps for you? **Look no further!**
 
 I built PACHI to demonstrate how Copilot could open and interact with a Power Apps canvas app on a user's behalf to satisfy their request within a Copilot chat session.
 
 ## TL;DR
 PACHI demonstrates how we could give Copilot the ability to interact with any Power App to fulfill a user's intent. 
 
-To support this capability,I developed methods for canvas app schema extraction and loading, canvas app simulation in a headless environment, and a LLM-prompting methodology to facilitate LLM interacting with a Power App to fulfill the user's intent.
+To support this capability, I developed methods for canvas app schema extraction and loading, canvas app simulation in a headless environment, and a LLM-prompting methodology to facilitate LLM interacting with a Power App to fulfill the user's intent.
 
 ## How PACHI Works
-PACHI uses a few uninque capabilities strung together into one cohesive system:
+PACHI uses a few unique capabilities strung together into one cohesive system:
 
-Within a chat session with Copilot (in this demo, just a generic agent, but pretent it is Copilot!), these are the steps that happen:
+Within a chat session with Copilot (in this demo, just a generic agent), these are the steps that happen:
 
 ### Step 1: The User Requests Copilot Use a Power App to Accomplish Something
 Much like how a user can tag a teams channel or other resources within Copilot, the user could in theory tag a Power App they have access to.
@@ -83,7 +83,7 @@ Whether it is clicking a button or entering in text, the accompanying Power Fx i
 In the example above, let's assume the LLM decided to click on the button "EnterButton".
 
 ### Step 7: We, again, ask the LLM what to do
-After executing the last decision it made, we now again desribe to the LLM what the result looks like (i.e. a new screen may have been navigated to where new controls are now being presented).
+After executing the last decision it made, we now again describe to the LLM what the result looks like (i.e. a new screen may have been navigated to where new controls are now being presented).
 
 For example, after clicking "EnterButton" in the previous example, that would have navigated to another screen in which this is now the situation being described to the LLM:
 
@@ -104,7 +104,7 @@ So far you have:
 Your task is: Add contact record with name 'Tim Hanewich', email 'timhanewich@email.com', and phone number 9417774321.
 ```
 
-Above you'll notice that after the first decison is made, we then append a continuous list of **every decision** the model is making and that we execute. This allows the model to have context as to what it has already done which is very important for it being able to know it has completed its task.
+Above you'll notice that after the first decision is made, we then append a continuous list of **every decision** the model is making and that we execute. This allows the model to have context as to what it has already done which is very important for it being able to know it has completed its task.
 
 ### Step 8: Repeat Steps 4-7 Until the Task is Complete
 We repeat steps 4-7 until the LLM finally indicates the task that it was assigned to do is complete using the `action: complete` output.
