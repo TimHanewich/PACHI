@@ -1,5 +1,5 @@
 # PACHI: Power Apps x Copilot Headless Integration
-Ever wondered what it would look like if Copilot could interact with your Power Apps for you? **Look no further!**
+Ever wondered what it would look like if Copilot could go use your Power Apps for you? **Look no further!**
 
 I built PACHI to demonstrate how Copilot could open and interact with a Power Apps canvas app on a user's behalf to satisfy their request within a Copilot chat session.
 
@@ -18,9 +18,9 @@ PACHI uses a few unique capabilities strung together into one cohesive system:
 Within a chat session with Copilot (in this demo, just a generic agent), these are the steps that happen:
 
 ### Step 1: The User Requests Copilot Use a Power App to Accomplish Something
-Much like how a user can tag a teams channel or other resources within Copilot, the user could in theory tag a Power App they have access to.
+Much like how a user can tag a teams channel or other resources within Copilot, the user can tag a Power Apps app to ask Copilot to use the app to fulfill a request.
 
-In the example above, the user is requesting that Copilot **use the "Contact Entry" app to save a new contact with first name 'Tim', last name 'Hanewich', email 'timhan@gmail.com', and phone number '9417774444'**.
+In the example above, the user is requesting that Copilot **use the "Contact Entry" app to save a new contact with first name 'Tim', last name 'Hanewich', email 'timhanewich@email.com', and phone number '94177743221'**.
 
 ### Step 2: Download App Schema
 Upon this being requested, a tool is called. This tool kicks off a multi-step process.
