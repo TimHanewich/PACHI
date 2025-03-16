@@ -1,4 +1,4 @@
-# PACHI: Power Apps x Canvas Headless Integration
+# PACHI: Power Apps x Copilot Headless Integration
 Ever wondered what it would look like if Copilot could interact with your Power Apps for you? **Look no further!**
 
 I built PACHI to demonstrate how Copilot could open and interact with a Power Apps canvas app on a user's behalf to satisfy their request within a Copilot chat session.
