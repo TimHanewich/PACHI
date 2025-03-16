@@ -69,10 +69,100 @@ namespace PACHI
                 AnsiConsole.MarkupLine("[red]And then come back here and try again![/]");
                 return;
             }
-            AnsiConsole.Markup("[gray]done![/]");
+            AnsiConsole.MarkupLine("[gray]done![/]");
+            Console.WriteLine();
+            Console.WriteLine();
 
 
+            //Create the agent
+            Agent a = new Agent();
+            a.Model = aoai;
+            a.Messages.Add(new Message(Role.system, "You are an AI agent that is meant to demonstrate how an AI can interact with a Power Apps app in a headless environment, performing the intent of a user against the app."));
+            
+            //Add tool: list apps
+            Tool tool_list_apps = new Tool("list_apps", "List the Power Apps canvas apps that the user has available to use.");
+            a.Tools.Add(tool_list_apps);
 
+            //Add tool: use app
+            Tool tool_use_app = new Tool("use_app", "Use an app to satisfy the user's request.");
+            tool_use_app.Parameters.Add(new ToolInputParameter("app_name", "The name of the Power App that the user wants to use."));
+            tool_use_app.Parameters.Add(new ToolInputParameter("task", "The task that the user is requesting we do in the app."));
+            a.Tools.Add(tool_use_app);
+
+            //Add opening message
+            string OpeningMsg = "Hello, I'm an AI agent that is here to demonstrate how Microsoft Copilot can be used to interact with any Power Apps in a virtual headless environment! How can I help you?";
+            a.Messages.Add(new Message(Role.assistant, OpeningMsg));
+            AnsiConsole.MarkupLine("[blue]" + OpeningMsg + "[/]");
+            Console.WriteLine();
+
+            //Loop
+            while (true)
+            {
+
+                //Input
+                Console.WriteLine();
+                string? input = null;
+                while (input == null || input == "")
+                {
+                    Console.Write("> ");
+                    input = Console.ReadLine();
+                    Console.WriteLine();
+                }
+                a.Messages.Add(new Message(Role.user, input));
+
+                //Prompt
+                Prompt:
+                AnsiConsole.Markup("[gray][italic]thinking... [/][/]");
+                Message response = await a.PromptAsync();
+                a.Messages.Add(response);
+                Console.WriteLine();
+
+                //Write content if there is some
+                if (response.Content != null)
+                {
+                    if (response.Content != "")
+                    {
+                        Console.WriteLine();
+                        AnsiConsole.MarkupLine("[blue]" + response.Content + "[/]");
+                    }
+                }
+
+                //Handle tool calls
+                if (response.ToolCalls.Length > 0)
+                {
+                    //Handle each tool call
+                    foreach (ToolCall tc in response.ToolCalls)
+                    {
+                        string tool_call_response_payload = "";
+
+                        //Fetch what the agent is asking for in the tool call
+                        if (tc.ToolName == "list_apps")
+                        {
+                            AnsiConsole.Markup("[gray][italic]checking your apps... [/][/]");
+                            string[] canvas_apps = PACPipeline.ListCanvasApps();
+                            tool_call_response_payload = JsonConvert.SerializeObject(canvas_apps);
+                        }
+                        else if (tc.ToolName == "use_app")
+                        {
+                            AnsiConsole.Markup("[gray][italic]accessing app... [/][/]");
+                        }
+
+                        //Append tool response to messages
+                        Message ToolResponseMessage = new Message();
+                        ToolResponseMessage.Role = Role.tool;
+                        ToolResponseMessage.ToolCallID = tc.ID;
+                        ToolResponseMessage.Content = tool_call_response_payload;
+                        a.Messages.Add(ToolResponseMessage);
+
+                        //Confirm completion of tool call
+                        AnsiConsole.MarkupLine("[gray][italic]complete[/][/]");
+                    }
+
+                    //Go straight to prompting again (do not ask user)
+                    goto Prompt;
+                }
+
+            } //end of infinite loop chat
 
 
         }
