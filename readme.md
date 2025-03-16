@@ -3,6 +3,10 @@ Ever wondered what it would look like if Copilot could interact with your Power 
 
 I built PACHI to demonstrate how Copilot could open and interact with a Power Apps canvas app on a user's behalf to satisfy their request within a Copilot chat session.
 
+*Click the image below for a working demonstration*
+
+[![demo vid](https://i.imgur.com/3rKUGUT.png)](https://youtu.be/BOgQa0-4gSM)
+
 ## TL;DR
 PACHI demonstrates how we could give Copilot the ability to interact with any Power App to fulfill a user's intent. 
 
