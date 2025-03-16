@@ -12,6 +12,12 @@ PACHI demonstrates how we could give Copilot the ability to interact with any Po
 
 To support this capability, I developed methods for canvas app schema extraction and loading, canvas app simulation in a headless environment, and an LLM-prompting methodology to facilitate an LLM interacting with a Power App to fulfill the user's intent.
 
+## Use PACHI Yourself
+- Ensure you have .NET 9.0 installed.
+- Install the PAC CLI, log in, and select an environment.
+- Enter the endpoint and API key for your Azure OpenAI deployment to keys.json in the root directory (if you have trouble, proceed and it will make the file for you and give you further instructions).
+- Navigate to [the src folder](./src/) and run `dotnet run`.
+
 ## How PACHI Works
 PACHI uses a few unique capabilities strung together into one cohesive system:
 
@@ -141,9 +147,3 @@ At this point, upon prompting *this* to the model, the model responds with an `a
 
 ## Model Testing
 In my tests, `GPT-4o` and `GPT-4o-mini` have both worked very well.
-
-## Use PACHI Yourself
-- Ensure you have .NET 9.0 installed.
-- Install the PAC CLI, log in, and select an environment.
-- Enter the endpoint and API key for your Azure OpenAI deployment to keys.json in the root directory (if you have trouble, proceed and it will make the file for you and give you further instructions).
-- Navigate to [the src folder](./src/) and run `dotnet run`.
